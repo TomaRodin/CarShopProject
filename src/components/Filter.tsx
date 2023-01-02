@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from '../styles/style.module.css';
 import array from "../carList.json"
-import { useState } from "react";
 import Car from "./Car"
 
 interface Car {
@@ -16,19 +15,10 @@ interface Car {
     firstRegistration: string
 }
 
-const Filter = () => {
-    const [selectedMaker, setSelectedMaker] = useState("All")
-    const [data, setData] = useState(array)
-    const [FuelType, setFuelType]: any = useState("All")
-    const [model, setModel] = useState("All")
-    const [FromYear, setFromYear] = useState("All")
-    const [ToYear, setToYear] = useState("All")
-    const [FromPrice, setFromPrice] = useState("All")
-    const [ToPrice, setToPrice] = useState("All")
-
+const Filter = (props) => {
     const SelectHandler = (e: any) => {
-        setSelectedMaker(e.target.value)
-        setModel("All")
+        props.setSelectedMaker(e.target.value)
+        props.setModel("All")
     }
 
     const Make = () => {
@@ -41,7 +31,7 @@ const Filter = () => {
         return (
             <div>
                 <label>Make</label> <br />
-                <select onChange={SelectHandler} value={selectedMaker} className={style.Selector1}>
+                <select onChange={SelectHandler} value={props.selectedMaker} className={style.Selector1}>
                     <option>All</option>
                     {uniqueArray.map(make => {
                         return (
@@ -54,8 +44,12 @@ const Filter = () => {
         )
     }
 
+    useEffect(() => {
+        FilteringData(array, props.selectedMaker, props.model, props.FuelType, props.FromYear, props.ToYear, props.FromPrice, props.ToPrice)
+    },[props.selectedMaker, props.model, props.FuelType, props.FromYear, props.ToYear, props.FromPrice, props.ToPrice])
+
     const Model = () => {
-        if (selectedMaker === "All" ) {
+        if (props.selectedMaker === "All" ) {
             const models: string[] = []
             array.map((car: Car) => {
                 models.push(car.model)
@@ -65,7 +59,7 @@ const Filter = () => {
             return (
                 <div>
                     <label>Model</label>
-                    <select className={style.Selector1} value={model} onChange={(e) => {setModel(e.target.value)}}>
+                    <select className={style.Selector1} value={props.model} onChange={(e) => {props.setModel(e.target.value)}}>
                         <option>All</option>
                         {uniqueModels.map(make => {
                                 return (
@@ -80,7 +74,7 @@ const Filter = () => {
         else {
             const models: string[] = []
             array.map((car: Car) => {
-                if (car.make === selectedMaker) {
+                if (car.make === props.selectedMaker) {
                     models.push(car.model)
                 }
             })
@@ -89,7 +83,7 @@ const Filter = () => {
             return (
                 <div>
                     <label>Model</label>
-                    <select className={style.Selector1} value={model} onChange={(e) => {setModel(e.target.value)}}>
+                    <select className={style.Selector1} value={props.model} onChange={(e) => {props.setModel(e.target.value)}}>
                     <option>All</option>
                         {uniqueModels.map(make => {
                                 return (
@@ -161,7 +155,22 @@ const Filter = () => {
             FilteredArray = FilteredArray.filter(car => car.price < toPrice)
         }
 
-        setData(FilteredArray)
+        props.setData(FilteredArray)
+    }
+
+    const AllCars = () => {
+        if (props.data.length < 1) {
+            return (
+                <p>0 cars match this criteria</p>
+            )
+        }
+        else {
+            return (
+                props.data.map((car: Car) => {
+                    return <Car data={car} />
+                })
+            )
+        }
     }
 
     return (
@@ -176,7 +185,7 @@ const Filter = () => {
 
                     <label>Fuel type</label> <br />
 
-                    <select className={style.Selector1} value={FuelType} onChange={(e) => setFuelType(e.target.value)}>
+                    <select className={style.Selector1} value={props.FuelType} onChange={(e) => props.setFuelType(e.target.value)}>
                         <option value="All">All</option>
                         <option value="Diesel">Diesel</option>
                         <option value="Gas">Gas</option>
@@ -188,11 +197,11 @@ const Filter = () => {
                     <label>First Registration</label> <br />
 
                     <div>    
-                        <select className={style.Selector2} value={FromYear} onChange={(e) => setFromYear(e.target.value)} placeholder="From">
+                        <select className={style.Selector2} value={props.FromYear} onChange={(e) => props.setFromYear(e.target.value)} placeholder="From">
                             <option>All</option>
                             <Years />
                         </select>
-                        <select className={style.Selector2} value={ToYear} onChange={(e) => setToYear(e.target.value)} placeholder="To">
+                        <select className={style.Selector2} value={props.ToYear} onChange={(e) => props.setToYear(e.target.value)} placeholder="To">
                             <option>All</option>
                             <Years />
                         </select>
@@ -201,11 +210,11 @@ const Filter = () => {
                     <label>Price</label> <br />
 
                     <div>    
-                        <select className={style.Selector2} value={FromPrice} onChange={(e) => setFromPrice(e.target.value)} placeholder="From">
+                        <select className={style.Selector2} value={props.FromPrice} onChange={(e) => props.setFromPrice(e.target.value)} placeholder="From">
                             <option>All</option>
                             <Price />
                         </select>
-                        <select className={style.Selector2} value={ToPrice} onChange={(e) => setToPrice(e.target.value)} placeholder="To">
+                        <select className={style.Selector2} value={props.ToPrice} onChange={(e) => props.setToPrice(e.target.value)} placeholder="To">
                             <option>All</option>
                             <Price />
                         </select>
@@ -213,14 +222,10 @@ const Filter = () => {
                 </div>
             </div>
 
-            <button onClick={() => FilteringData(array, selectedMaker, model, FuelType, FromYear, ToYear, FromPrice, ToPrice)}>F</button>
-
             <div className={style.DataContainer}>
                 <h3>Matching your search criteria</h3>
                 <br />
-                {data.map((car: Car) => {
-                    return <Car data={car} />
-                })}
+                <AllCars />
             </div>
         </div>
     )

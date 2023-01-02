@@ -76,6 +76,7 @@ body {
   text-align: center;
   color: #797070;
   font-size: 18px;
+  margin-left: 15px;
 }
 
 .SearchButton {
@@ -85,6 +86,7 @@ body {
   color: #fff;
   border-radius: 5px;
   font-size: 18px;
+  margin-left: 15px;
 }
 
 .FilterContainer {
@@ -97,6 +99,7 @@ body {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   font-weight: bold;
   font-family:Arial, Helvetica, sans-serif;
+  height: 30%;
 }
 
 .FContainer {
@@ -140,6 +143,10 @@ body {
   width: 65%;
 }
 
+.DataContainer h3 {
+  margin-left: 20px;
+  margin-top: 30px;
+}
 .CarContainer {
   background-color: white;
   margin: 5%;
@@ -170,6 +177,7 @@ body {
   margin-left: 4%;
   margin-right: 4%;
   padding-bottom: 200px;
+  height: 250px;
 }
 
 .InfoContainer {
@@ -180,4 +188,15 @@ body {
   width: 70%;
   margin-top: 50px;
   height: 30%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.InfoRegFuel {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 25%;
+  margin-left: 25%;
+  font-size: 15px;
 }

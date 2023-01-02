@@ -2,6 +2,7 @@ import React from "react";
 import style from "../styles/style.module.css";
 import array from "../carList.json"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Car {
     id: string,
@@ -15,8 +16,10 @@ interface Car {
     firstRegistration: string
 }
 
-const Home = () => {
-    const [selectedMaker, setSelectedMaker] = useState("All makes")
+const Home = (props: any) => {
+    const [selectedMaker, setSelectedMaker] = useState("All")
+    const [selectedModel, setSelectedModel] = useState("All")
+    const navigate = useNavigate();
 
     const SelectMake = () => {
         const SelectHandler = (e: any) => {
@@ -43,6 +46,9 @@ const Home = () => {
             </div>
         )
     }
+    const SelectHandlerModel = (e: any) => {
+        setSelectedModel(e.target.value)
+    }
 
     const SelectModel = () => {
         if (selectedMaker === "All makes" ) {
@@ -54,7 +60,8 @@ const Home = () => {
             let uniqueModels = [...new Set(models)]
             return (
                 <div>
-                    <select className={style.Selectors}>
+                    <select className={style.Selectors} onChange={SelectHandlerModel} value={selectedModel}>
+                        <option>All</option>
                         {uniqueModels.map(make => {
                             return (
                                 <option>{make}</option>
@@ -76,7 +83,8 @@ const Home = () => {
 
             return (
                 <div>
-                    <select className={style.Selectors}>
+                    <select className={style.Selectors} onChange={SelectHandlerModel} value={selectedModel}>
+                        <option>All</option>
                         {uniqueModels.map(make => {
                                 return (
                                     <option>{make}</option>
@@ -88,6 +96,13 @@ const Home = () => {
         }
     }
 
+    const handleSearch = () => {
+        props.setSelectedMaker(selectedMaker)
+        props.setModel(selectedModel)
+
+        navigate("/list")
+    }
+
     return (
         <div>
             <div className={style.SearchContainer}>
@@ -96,7 +111,7 @@ const Home = () => {
                 <div className={style.SelectContainer}>
                     <SelectMake />
                     <SelectModel />
-                    <button className={style.SearchButton}>Search</button>
+                    <button className={style.SearchButton} onClick={handleSearch}>Search</button>
                 </div> 
             </div>
         </div>
