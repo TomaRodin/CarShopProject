@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import style from '../styles/style.module.css';
 import array from "../carList.json"
-import Car from "./Car"
+import CarContainer from "./Car"
 
 interface Car {
     id: string,
@@ -15,7 +15,28 @@ interface Car {
     firstRegistration: string
 }
 
-const Filter = (props) => {
+interface Props {
+   selectedMaker: string,
+   data: Car[],
+   FuelType: string,
+   model: string,
+   FromYear: string,
+   ToYear: string,
+   FromPrice: string,
+   ToPrice: string,
+   setSelectedMaker: (a: string) => void 
+   setData: (a: Car[]) => void
+   setFuelType: (a: string) => void
+   setModel: (a: string) => void
+   setFromYear: (a: string) => void
+   setToYear: (a: string) => void
+   setFromPrice: (a: string) => void
+   setToPrice: (a: string) => void
+}
+
+const Filter = (props: Props) => {
+    const [FirstYear, setFirstYear]: any = useState(1990)
+
     const SelectHandler = (e: any) => {
         props.setSelectedMaker(e.target.value)
         props.setModel("All")
@@ -98,13 +119,32 @@ const Filter = (props) => {
 
     const Years = () => {
         const years: number[] = [] 
-        for (let i = 1990; i <= 2022; i++) {
+        for (let i = 1990; i <= 2023; i++) {
             years.push(i)
         }
         return (
-            years.reverse().map(year => {
-                return <option>{year}</option>
-            })
+            <>
+                {years.reverse().map(year => {
+                    return <option>{year}</option>
+                })}
+            </>
+        )
+    }
+
+    const YearsVariable = () => {
+        const years: number[] = [] 
+
+        const FYear = Number(FirstYear)+1
+
+        for (let i = FYear; i <= 2023; i++) {
+            years.push(i)
+        }
+        return (
+            <>
+                {years.reverse().map(year => {
+                    return <option>{year}</option>
+                })}
+            </>
         )
     }
 
@@ -118,9 +158,11 @@ const Filter = (props) => {
             price.push(i*1000)
         }
         return (
-            price.map(p => {
-                return <option>{p}</option>
-            })
+            <>
+                {price.map(p => {
+                    return <option>{p}</option>
+                })}
+            </>
         )
     }
 
@@ -166,11 +208,17 @@ const Filter = (props) => {
         }
         else {
             return (
-                props.data.map((car: Car) => {
-                    return <Car data={car} />
-                })
+                <>
+                    {props.data.map((car: Car) => {
+                        return <CarContainer data={car} />
+                    })}
+                </>
             )
         }
+    }
+
+    const handleChangeYear = (e: any) => {
+        setFirstYear(e.target.value)
     }
 
     return (
@@ -197,13 +245,13 @@ const Filter = (props) => {
                     <label>First Registration</label> <br />
 
                     <div>    
-                        <select className={style.Selector2} value={props.FromYear} onChange={(e) => props.setFromYear(e.target.value)} placeholder="From">
+                        <select className={style.Selector2} value={props.FromYear} onChange={(e) => {props.setFromYear(e.target.value); handleChangeYear(e)}} placeholder="From">
                             <option>All</option>
                             <Years />
                         </select>
                         <select className={style.Selector2} value={props.ToYear} onChange={(e) => props.setToYear(e.target.value)} placeholder="To">
                             <option>All</option>
-                            <Years />
+                            <YearsVariable />
                         </select>
                     </div>
 

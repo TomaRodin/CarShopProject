@@ -30,6 +30,7 @@ export const App: React.FC = () => {
           <Route path="/" element={<Home setSelectedMaker={setSelectedMaker} setModel={setModel} />} />
           <Route path="/list" element={<Filter selectedMaker={selectedMaker} setSelectedMaker={setSelectedMaker} data={data} setData={setData} FuelType={FuelType} setFuelType={setFuelType} model={model} setModel={setModel} FromYear={FromYear} setFromYear={setFromYear} ToYear={ToYear} setToYear={setToYear} FromPrice={FromPrice} setFromPrice={setFromPrice} ToPrice={ToPrice} setToPrice={setToPrice} />} />  
           <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/contact" element={<h1>Contact</h1>} />
         </Routes>
       </BrowserRouter>
 
